@@ -7,7 +7,6 @@ def main(page: ft.Page):
 
     task_list = ft.Column(spacing=10)
 
-    # -------------------- Функции --------------------
     def load_task():
         task_list.controls.clear()
         for task_id, task_text, completed in main_db.get_tasks():
@@ -36,7 +35,6 @@ def main(page: ft.Page):
             page.update()
         save_button = ft.IconButton(icon=ft.Icons.SAVE_ALT_ROUNDED, on_click=save_task)
 
-        # Удаление отдельной задачи
         def delete_task(_):
             main_db.delete_task(task_id)
             load_task()
@@ -44,7 +42,6 @@ def main(page: ft.Page):
 
         return ft.Row([checkbox, task_field, edit_button, save_button, delete_button])
 
-    # Добавление новой задачи
     def add_task(_):
         if task_input.value:
             task_id = main_db.add_task(task_input.value)
@@ -52,24 +49,20 @@ def main(page: ft.Page):
             task_input.value = ''
             page.update()
 
-    # -------------------- Фильтры (кнопки, пока не рабочие) --------------------
     filter_buttons = ft.Row([
         ft.ElevatedButton("Все"),
         ft.ElevatedButton("В работе"),
         ft.ElevatedButton("Готово")
     ], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
 
-    # -------------------- Очистка выполненных --------------------
     def clear_completed_tasks(_):
         main_db.delete_completed_tasks()
         load_task()
     clear_button = ft.ElevatedButton("Очистить выполненные", on_click=clear_completed_tasks)
 
-    # -------------------- Поле ввода и кнопка добавления --------------------
     task_input = ft.TextField(label='Введите новую задачу', expand=True)
     add_button = ft.IconButton(icon=ft.Icons.ADD, tooltip='Добавить задачу', on_click=add_task)
 
-    # -------------------- Добавление всех элементов на страницу --------------------
     page.add(
         ft.Row([task_input, add_button]),
         filter_buttons,
@@ -79,7 +72,6 @@ def main(page: ft.Page):
 
     load_task()
 
-# -------------------- Запуск приложения --------------------
 if __name__ == '__main__':
-    main_db.init_db()  # <- создаёт базу и таблицу, если их нет
+    main_db.init_db() 
     ft.app(target=main)
