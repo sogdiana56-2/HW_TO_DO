@@ -17,12 +17,10 @@ def main(page: ft.Page):
         task_field = ft.TextField(value=task_text, read_only=True, expand=True)
         checkbox = ft.Checkbox(value=bool(completed))
 
-        # Обновление состояния в базе при смене чекбокса
         def toggle_completed(e):
             main_db.update_task_completed(task_id, checkbox.value)
         checkbox.on_change = toggle_completed
 
-        # Редактирование задачи
         def enable_edit(_):
             task_field.read_only = False
             task_field.update()
